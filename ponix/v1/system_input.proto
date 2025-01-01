@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ponix.v1;
+
+import "aquaponics/v1/grow_medium.proto";
+import "aquaponics/v1/tank.proto";
+import "soilponics/v1/field.proto";
+
+message SystemInput {
+  oneof input {
+    aquaponics.v1.GrowMedium grow_medium = 1;
+    aquaponics.v1.Tank tank = 2;
+    soilponics.v1.Field field = 3;
+  }
+}

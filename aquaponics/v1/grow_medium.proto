@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package aquaponics.v1;
+
+enum MediumType {
+  MEDIUM_TYPE_UNSPECIFIED = 0;
+  MEDIUM_TYPE_MEDIA = 1;
+  MEDIUM_TYPE_RAFT = 2;
+  MEDIUM_TYPE_NFT = 3;
+}
+
+message GrowMedium {
+  string id = 1;
+  string name = 2;
+  MediumType medium_type = 3;
+}

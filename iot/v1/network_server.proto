@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package iot.v1;
+
+enum IOTPlatform {
+  IOT_PLATFORM_UNSPECIFIED = 0;
+  IOT_PLATFORM_TTN = 1;
+}
+
+message NetworkServer {
+  string id = 1;
+  string system_id = 2;
+  string name = 3;
+  IOTPlatform iot_platform = 4;
+}

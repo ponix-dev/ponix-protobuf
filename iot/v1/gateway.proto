@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package iot.v1;
+
+message Gateway {
+  string id = 1;
+  string system_id = 2;
+  string network_server_id = 3;
+  string name = 4;
+}
