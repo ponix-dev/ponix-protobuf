@@ -4,12 +4,51 @@ package ponix.v1;
 
 import "aquaponics/v1/grow_medium.proto";
 import "aquaponics/v1/tank.proto";
+import "iot/v1/end_device.proto";
 import "soilponics/v1/field.proto";
 
 message SystemInput {
-  oneof input {
-    aquaponics.v1.GrowMedium grow_medium = 1;
-    aquaponics.v1.Tank tank = 2;
-    soilponics.v1.Field field = 3;
+  string id = 1;
+  string name = 2;
+  oneof input_data {
+    aquaponics.v1.GrowMediumData grow_medium = 3;
+    aquaponics.v1.TankData tank = 4;
+    soilponics.v1.FieldData field = 5;
   }
+}
+
+message CreateSystemInputRequest {
+  string system_id = 1;
+  string name = 2;
+  oneof input_data {
+    aquaponics.v1.GrowMediumData grow_medium = 3;
+    aquaponics.v1.TankData tank = 4;
+    soilponics.v1.FieldData field = 5;
+  }
+}
+
+message CreateSystemInputResponse {
+  string system_input_id = 1;
+}
+
+message SystemInputRequest {
+  string system_input_id = 1;
+}
+
+message SystemInputResponse {
+  SystemInput system_input = 1;
+}
+
+message SystemInputEndDevicesRequest {
+  string system_input_id = 1;
+}
+
+message SystemInputEndDevicesResponse {
+  repeated iot.v1.EndDevice end_devices = 1;
+}
+
+service SystemInputService {
+  rpc CreateSystemInput(CreateSystemInputRequest) returns (CreateSystemInputResponse);
+  rpc SystemInput(SystemInputRequest) returns (SystemInputResponse);
+  rpc SystemInputEndDevices(SystemInputEndDevicesRequest) returns (SystemInputEndDevicesResponse);
 }

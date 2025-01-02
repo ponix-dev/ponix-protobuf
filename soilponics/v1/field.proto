@@ -2,7 +2,4 @@ syntax = "proto3";
 
 package soilponics.v1;
 
-message Field {
-  string id = 1;
-  string name = 2;
-}
+message FieldData {}

@@ -13,6 +13,15 @@ message System {
   string name = 3;
 }
 
+message CreateSystemRequest {
+  string organization_id = 1;
+  string name = 2;
+}
+
+message CreateSystemResponse {
+  string system_id = 1;
+}
+
 message SystemRequest {
   string system_id = 1;
 }
@@ -54,6 +63,7 @@ message SystemInputsResponse {
 }
 
 service SystemService {
+  rpc CreateSystem(CreateSystemRequest) returns (CreateSystemResponse);
   rpc System(SystemRequest) returns (SystemResponse);
   rpc SystemNetworkServers(SystemNetworkServersRequest) returns (SystemNetworkServersResponse);
   rpc SystemGateways(SystemGatewaysRequest) returns (SystemGatewaysResponse);

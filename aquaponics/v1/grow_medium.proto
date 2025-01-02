@@ -9,8 +9,6 @@ enum MediumType {
   MEDIUM_TYPE_NFT = 3;
 }
 
-message GrowMedium {
-  string id = 1;
-  string name = 2;
-  MediumType medium_type = 3;
+message GrowMediumData {
+  MediumType medium_type = 1;
 }

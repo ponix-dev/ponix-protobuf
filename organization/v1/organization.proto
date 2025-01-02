@@ -10,6 +10,14 @@ message Organization {
   string name = 2;
 }
 
+message CreateOrganizationRequest {
+  string name = 1;
+}
+
+message CreateOrganizationResponse {
+  string id = 1;
+}
+
 message OrganizationRequest {
   string organization_id = 1;
 }
@@ -35,6 +43,7 @@ message OrganizationSystemsResponse {
 }
 
 service OrganizationService {
+  rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc Organization(OrganizationRequest) returns (OrganizationResponse);
   rpc OrganizationUsers(OrganizationUsersRequest) returns (OrganizationUsersResponse);
   rpc OrganizationSystems(OrganizationSystemsRequest) returns (OrganizationSystemsResponse);

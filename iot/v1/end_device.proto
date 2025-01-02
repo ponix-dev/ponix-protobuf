@@ -7,4 +7,29 @@ message EndDevice {
   string system_id = 2;
   string network_server_id = 3;
   string name = 4;
+  string system_input_id = 5;
+}
+
+message CreateEndDeviceRequest {
+  string system_id = 1;
+  string network_server_id = 2;
+  string system_input_id = 3;
+  string name = 4;
+}
+
+message CreateEndDeviceResponse {
+  string end_device_id = 1;
+}
+
+message EndDeviceRequest {
+  string end_device_id = 1;
+}
+
+message EndDeviceResponse {
+  EndDevice end_device = 1;
+}
+
+service EndDeviceService {
+  rpc CreateEndDevice(CreateEndDeviceRequest) returns (CreateEndDeviceResponse);
+  rpc EndDevice(EndDeviceRequest) returns (EndDeviceResponse);
 }

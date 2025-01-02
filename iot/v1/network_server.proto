@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package iot.v1;
 
+import "iot/v1/end_device.proto";
+import "iot/v1/gateway.proto";
+
 enum IOTPlatform {
   IOT_PLATFORM_UNSPECIFIED = 0;
   IOT_PLATFORM_TTN = 1;
@@ -12,4 +15,45 @@ message NetworkServer {
   string system_id = 2;
   string name = 3;
   IOTPlatform iot_platform = 4;
+}
+
+message CreateNetworkServerRequest {
+  string system_id = 1;
+  string name = 2;
+  IOTPlatform iot_platform = 3;
+}
+
+message CreateNetworkServerResponse {
+  string network_server_id = 1;
+}
+
+message NetworkServerRequest {
+  string network_server_id = 1;
+}
+
+message NetworkServerResponse {
+  NetworkServer network_server = 1;
+}
+
+message NetworkServerGatewaysRequest {
+  string network_server_id = 1;
+}
+
+message NetworkServerGatewaysResponse {
+  repeated iot.v1.Gateway gateways = 1;
+}
+
+message NetworkServerEndDevicesRequest {
+  string network_server_id = 1;
+}
+
+message NetworkServerEndDevicesResponse {
+  repeated iot.v1.EndDevice end_devices = 1;
+}
+
+service NetworkServerService {
+  rpc CreateNetworkServer(CreateNetworkServerRequest) returns (CreateNetworkServerResponse);
+  rpc NetworkServer(NetworkServerRequest) returns (NetworkServerResponse);
+  rpc NetworkServerGateways(NetworkServerGatewaysRequest) returns (NetworkServerGatewaysResponse);
+  rpc NetworkServerEndDevices(NetworkServerEndDevicesRequest) returns (NetworkServerEndDevicesResponse);
 }
