@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package organization.v1;
 
+import "buf/validate/validate.proto";
 import "organization/v1/user.proto";
 import "ponix/v1/system.proto";
 
@@ -14,41 +15,41 @@ enum OrganizationStatus {
 }
 
 message Organization {
-  string id = 1;
-  string name = 2;
-  OrganizationStatus status = 3;
+  string id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
+  OrganizationStatus status = 3 [(buf.validate.field).required = true];
 }
 
 message CreateOrganizationRequest {
-  string name = 1;
+  string name = 1 [(buf.validate.field).required = true];
 }
 
 message CreateOrganizationResponse {
-  string id = 1;
+  string id = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationRequest {
-  string organization_id = 1;
+  string organization_id = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationResponse {
-  Organization organization = 1;
+  Organization organization = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationUsersRequest {
-  string organization_id = 1;
+  string organization_id = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationUsersResponse {
-  repeated organization.v1.User users = 1;
+  repeated organization.v1.User users = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationSystemsRequest {
-  string organization_id = 1;
+  string organization_id = 1 [(buf.validate.field).required = true];
 }
 
 message OrganizationSystemsResponse {
-  repeated ponix.v1.System systems = 1;
+  repeated ponix.v1.System systems = 1 [(buf.validate.field).required = true];
 }
 
 service OrganizationService {

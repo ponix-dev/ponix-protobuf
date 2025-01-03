@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package ponix.v1;
 
+import "buf/validate/validate.proto";
 import "iot/v1/end_device.proto";
 import "iot/v1/gateway.proto";
 import "iot/v1/network_server.proto";
@@ -16,59 +17,59 @@ enum SystemStatus {
 }
 
 message System {
-  string id = 1;
-  string organization_id = 2;
-  string name = 3;
-  SystemStatus status = 4;
+  string id = 1 [(buf.validate.field).required = true];
+  string organization_id = 2 [(buf.validate.field).required = true];
+  string name = 3 [(buf.validate.field).required = true];
+  SystemStatus status = 4 [(buf.validate.field).required = true];
 }
 
 message CreateSystemRequest {
-  string organization_id = 1;
-  string name = 2;
+  string organization_id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
 }
 
 message CreateSystemResponse {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemRequest {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemResponse {
-  System system = 1;
+  System system = 1 [(buf.validate.field).required = true];
 }
 
 message SystemNetworkServersRequest {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemNetworkServersResponse {
-  repeated iot.v1.NetworkServer network_servers = 1;
+  repeated iot.v1.NetworkServer network_servers = 1 [(buf.validate.field).required = true];
 }
 
 message SystemGatewaysRequest {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemGatewaysResponse {
-  repeated iot.v1.Gateway gateways = 1;
+  repeated iot.v1.Gateway gateways = 1 [(buf.validate.field).required = true];
 }
 
 message SystemEndDevicesRequest {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemEndDevicesResponse {
-  repeated iot.v1.EndDevice end_devices = 1;
+  repeated iot.v1.EndDevice end_devices = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputsRequest {
-  string system_id = 1;
+  string system_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputsResponse {
-  repeated ponix.v1.SystemInput inputs = 1;
+  repeated ponix.v1.SystemInput inputs = 1 [(buf.validate.field).required = true];
 }
 
 service SystemService {

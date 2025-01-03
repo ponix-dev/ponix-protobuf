@@ -3,6 +3,8 @@ version: v2
 modules:
   - path: .
     name: buf.build/ponix/ponix
+deps:
+  - buf.build/bufbuild/protovalidate
 lint:
   use:
     - STANDARD

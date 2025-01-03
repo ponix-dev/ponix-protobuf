@@ -4,6 +4,7 @@ package ponix.v1;
 
 import "aquaponics/v1/grow_medium.proto";
 import "aquaponics/v1/tank.proto";
+import "buf/validate/validate.proto";
 import "iot/v1/end_device.proto";
 import "soilponics/v1/field.proto";
 
@@ -16,20 +17,24 @@ enum SystemInputStatus {
 }
 
 message SystemInput {
-  string id = 1;
-  string name = 2;
+  string id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
   oneof input_data {
+    option (buf.validate.oneof).required = true;
+
     aquaponics.v1.GrowMediumData grow_medium = 3;
     aquaponics.v1.TankData tank = 4;
     soilponics.v1.FieldData field = 5;
   }
-  SystemInputStatus status = 6;
+  SystemInputStatus status = 6 [(buf.validate.field).required = true];
 }
 
 message CreateSystemInputRequest {
-  string system_id = 1;
-  string name = 2;
+  string system_id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
   oneof input_data {
+    option (buf.validate.oneof).required = true;
+
     aquaponics.v1.GrowMediumData grow_medium = 3;
     aquaponics.v1.TankData tank = 4;
     soilponics.v1.FieldData field = 5;
@@ -37,23 +42,23 @@ message CreateSystemInputRequest {
 }
 
 message CreateSystemInputResponse {
-  string system_input_id = 1;
+  string system_input_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputRequest {
-  string system_input_id = 1;
+  string system_input_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputResponse {
-  SystemInput system_input = 1;
+  SystemInput system_input = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputEndDevicesRequest {
-  string system_input_id = 1;
+  string system_input_id = 1 [(buf.validate.field).required = true];
 }
 
 message SystemInputEndDevicesResponse {
-  repeated iot.v1.EndDevice end_devices = 1;
+  repeated iot.v1.EndDevice end_devices = 1 [(buf.validate.field).required = true];
 }
 
 service SystemInputService {

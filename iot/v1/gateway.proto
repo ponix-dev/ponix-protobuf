@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package iot.v1;
 
+import "buf/validate/validate.proto";
 import "iot/v1/end_device.proto";
 
 enum GatewayStatus {
@@ -13,37 +14,37 @@ enum GatewayStatus {
 }
 
 message Gateway {
-  string id = 1;
-  string system_id = 2;
-  string network_server_id = 3;
-  string name = 4;
-  GatewayStatus status = 5;
+  string id = 1 [(buf.validate.field).required = true];
+  string system_id = 2 [(buf.validate.field).required = true];
+  string network_server_id = 3 [(buf.validate.field).required = true];
+  string name = 4 [(buf.validate.field).required = true];
+  GatewayStatus status = 5 [(buf.validate.field).required = true];
 }
 
 message CreateGatewayRequest {
-  string system_id = 1;
-  string network_server_id = 2;
-  string name = 3;
+  string system_id = 1 [(buf.validate.field).required = true];
+  string network_server_id = 2 [(buf.validate.field).required = true];
+  string name = 3 [(buf.validate.field).required = true];
 }
 
 message CreateGatewayResponse {
-  string gateway_id = 1;
+  string gateway_id = 1 [(buf.validate.field).required = true];
 }
 
 message GatewayRequest {
-  string gateway_id = 1;
+  string gateway_id = 1 [(buf.validate.field).required = true];
 }
 
 message GatewayResponse {
-  Gateway gateway = 1;
+  Gateway gateway = 1 [(buf.validate.field).required = true];
 }
 
 message GatewayEndDevicesRequest {
-  string gateway_id = 1;
+  string gateway_id = 1 [(buf.validate.field).required = true];
 }
 
 message GatewayEndDevicesResponse {
-  repeated iot.v1.EndDevice end_devices = 1;
+  repeated iot.v1.EndDevice end_devices = 1 [(buf.validate.field).required = true];
 }
 
 service GatewayService {

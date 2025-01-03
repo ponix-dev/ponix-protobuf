@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package aquaponics.v1;
 
+import "buf/validate/validate.proto";
+
 enum MediumType {
   MEDIUM_TYPE_UNSPECIFIED = 0;
   MEDIUM_TYPE_MEDIA = 1;
@@ -10,5 +12,5 @@ enum MediumType {
 }
 
 message GrowMediumData {
-  MediumType medium_type = 1;
+  MediumType medium_type = 1 [(buf.validate.field).required = true];
 }

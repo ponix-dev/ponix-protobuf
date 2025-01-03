@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package iot.v1;
 
+import "buf/validate/validate.proto";
+
 enum EndDeviceStatus {
   END_DEVICE_STATUS_UNSPECIFIED = 0;
   END_DEVICE_STATUS_PENDING = 1;
@@ -11,31 +13,31 @@ enum EndDeviceStatus {
 }
 
 message EndDevice {
-  string id = 1;
-  string system_id = 2;
-  string network_server_id = 3;
-  string name = 4;
-  string system_input_id = 5;
-  EndDeviceStatus status = 6;
+  string id = 1 [(buf.validate.field).required = true];
+  string system_id = 2 [(buf.validate.field).required = true];
+  string network_server_id = 3 [(buf.validate.field).required = true];
+  string name = 4 [(buf.validate.field).required = true];
+  string system_input_id = 5 [(buf.validate.field).required = true];
+  EndDeviceStatus status = 6 [(buf.validate.field).required = true];
 }
 
 message CreateEndDeviceRequest {
-  string system_id = 1;
-  string network_server_id = 2;
-  string system_input_id = 3;
-  string name = 4;
+  string system_id = 1 [(buf.validate.field).required = true];
+  string network_server_id = 2 [(buf.validate.field).required = true];
+  string system_input_id = 3 [(buf.validate.field).required = true];
+  string name = 4 [(buf.validate.field).required = true];
 }
 
 message CreateEndDeviceResponse {
-  string end_device_id = 1;
+  string end_device_id = 1 [(buf.validate.field).required = true];
 }
 
 message EndDeviceRequest {
-  string end_device_id = 1;
+  string end_device_id = 1 [(buf.validate.field).required = true];
 }
 
 message EndDeviceResponse {
-  EndDevice end_device = 1;
+  EndDevice end_device = 1 [(buf.validate.field).required = true];
 }
 
 service EndDeviceService {
