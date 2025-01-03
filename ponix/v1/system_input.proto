@@ -27,6 +27,7 @@ message SystemInput {
     soilponics.v1.FieldData field = 5;
   }
   SystemInputStatus status = 6 [(buf.validate.field).required = true];
+  string system_id = 7 [(buf.validate.field).required = true];
 }
 
 message CreateSystemInputRequest {
