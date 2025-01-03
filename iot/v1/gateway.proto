@@ -17,6 +17,7 @@ message Gateway {
   string system_id = 2;
   string network_server_id = 3;
   string name = 4;
+  GatewayStatus status = 5;
 }
 
 message CreateGatewayRequest {
