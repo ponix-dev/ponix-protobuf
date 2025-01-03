@@ -2,11 +2,20 @@ syntax = "proto3";
 
 package organization.v1;
 
+enum UserStatus {
+  USER_STATUS_UNSPECIFIED = 0;
+  USER_STATUS_PENDING = 1;
+  USER_STATUS_ACTIVE = 2;
+  USER_STATUS_INACTIVE = 3;
+  USER_STATUS_ERROR = 4;
+}
+
 message User {
   string id = 1;
   string first_name = 2;
   string last_name = 3;
   string organization_id = 4;
+  UserStatus status = 5;
 }
 
 message CreateUserRequest {

@@ -4,6 +4,14 @@ package iot.v1;
 
 import "iot/v1/end_device.proto";
 
+enum GatewayStatus {
+  GATEWAY_STATUS_UNSPECIFIED = 0;
+  GATEWAY_STATUS_PENDING = 1;
+  GATEWAY_STATUS_ACTIVE = 2;
+  GATEWAY_STATUS_INACTIVE = 3;
+  GATEWAY_STATUS_ERROR = 4;
+}
+
 message Gateway {
   string id = 1;
   string system_id = 2;

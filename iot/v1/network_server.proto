@@ -10,11 +10,20 @@ enum IOTPlatform {
   IOT_PLATFORM_TTN = 1;
 }
 
+enum NetworkServerStatus {
+  NETWORK_SERVER_STATUS_UNSPECIFIED = 0;
+  NETWORK_SERVER_STATUS_PENDING = 1;
+  NETWORK_SERVER_STATUS_ACTIVE = 2;
+  NETWORK_SERVER_STATUS_INACTIVE = 3;
+  NETWORK_SERVER_STATUS_ERROR = 4;
+}
+
 message NetworkServer {
   string id = 1;
   string system_id = 2;
   string name = 3;
   IOTPlatform iot_platform = 4;
+  NetworkServerStatus status = 5;
 }
 
 message CreateNetworkServerRequest {

@@ -7,10 +7,19 @@ import "iot/v1/gateway.proto";
 import "iot/v1/network_server.proto";
 import "ponix/v1/system_input.proto";
 
+enum SystemStatus {
+  SYSTEM_STATUS_UNSPECIFIED = 0;
+  SYSTEM_STATUS_PENDING = 1;
+  SYSTEM_STATUS_ACTIVE = 2;
+  SYSTEM_STATUS_INACTIVE = 3;
+  SYSTEM_STATUS_ERROR = 4;
+}
+
 message System {
   string id = 1;
   string organization_id = 2;
   string name = 3;
+  SystemStatus status = 4;
 }
 
 message CreateSystemRequest {
@@ -27,7 +36,7 @@ message SystemRequest {
 }
 
 message SystemResponse {
-  string system_id = 1;
+  System system = 1;
 }
 
 message SystemNetworkServersRequest {

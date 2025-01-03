@@ -2,12 +2,21 @@ syntax = "proto3";
 
 package iot.v1;
 
+enum EndDeviceStatus {
+  END_DEVICE_STATUS_UNSPECIFIED = 0;
+  END_DEVICE_STATUS_PENDING = 1;
+  END_DEVICE_STATUS_ACTIVE = 2;
+  END_DEVICE_STATUS_INACTIVE = 3;
+  END_DEVICE_STATUS_ERROR = 4;
+}
+
 message EndDevice {
   string id = 1;
   string system_id = 2;
   string network_server_id = 3;
   string name = 4;
   string system_input_id = 5;
+  EndDeviceStatus status = 6;
 }
 
 message CreateEndDeviceRequest {

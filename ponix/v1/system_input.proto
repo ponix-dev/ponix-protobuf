@@ -7,6 +7,14 @@ import "aquaponics/v1/tank.proto";
 import "iot/v1/end_device.proto";
 import "soilponics/v1/field.proto";
 
+enum SystemInputStatus {
+  SYSTEM_INPUT_STATUS_UNSPECIFIED = 0;
+  SYSTEM_INPUT_STATUS_PENDING = 1;
+  SYSTEM_INPUT_STATUS_ACTIVE = 2;
+  SYSTEM_INPUT_STATUS_INACTIVE = 3;
+  SYSTEM_INPUT_STATUS_ERROR = 4;
+}
+
 message SystemInput {
   string id = 1;
   string name = 2;
@@ -15,6 +23,7 @@ message SystemInput {
     aquaponics.v1.TankData tank = 4;
     soilponics.v1.FieldData field = 5;
   }
+  SystemInputStatus status = 6;
 }
 
 message CreateSystemInputRequest {

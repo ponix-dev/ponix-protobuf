@@ -5,9 +5,18 @@ package organization.v1;
 import "organization/v1/user.proto";
 import "ponix/v1/system.proto";
 
+enum OrganizationStatus {
+  ORGANIZATION_STATUS_UNSPECIFIED = 0;
+  ORGANIZATION_STATUS_PENDING = 1;
+  ORGANIZATION_STATUS_ACTIVE = 2;
+  ORGANIZATION_STATUS_INACTIVE = 3;
+  ORGANIZATION_STATUS_ERROR = 4;
+}
+
 message Organization {
   string id = 1;
   string name = 2;
+  OrganizationStatus status = 3;
 }
 
 message CreateOrganizationRequest {
