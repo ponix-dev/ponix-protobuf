@@ -3,21 +3,21 @@ syntax = "proto3";
 package organization.v1;
 
 import "buf/validate/validate.proto";
-import "organization/v1/user.proto";
-import "ponix/v1/system.proto";
+import "google/protobuf/timestamp.proto";
 
 enum OrganizationStatus {
   ORGANIZATION_STATUS_UNSPECIFIED = 0;
   ORGANIZATION_STATUS_PENDING = 1;
   ORGANIZATION_STATUS_ACTIVE = 2;
   ORGANIZATION_STATUS_INACTIVE = 3;
-  ORGANIZATION_STATUS_ERROR = 4;
 }
 
 message Organization {
   string id = 1 [(buf.validate.field).required = true];
   string name = 2 [(buf.validate.field).required = true];
   OrganizationStatus status = 3 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
 }
 
 message CreateOrganizationRequest {
@@ -25,7 +25,10 @@ message CreateOrganizationRequest {
 }
 
 message CreateOrganizationResponse {
-  string id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
+  OrganizationStatus status = 3 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
 }
 
 message OrganizationRequest {
@@ -36,25 +39,7 @@ message OrganizationResponse {
   Organization organization = 1 [(buf.validate.field).required = true];
 }
 
-message OrganizationUsersRequest {
-  string organization_id = 1 [(buf.validate.field).required = true];
-}
-
-message OrganizationUsersResponse {
-  repeated organization.v1.User users = 1 [(buf.validate.field).required = true];
-}
-
-message OrganizationSystemsRequest {
-  string organization_id = 1 [(buf.validate.field).required = true];
-}
-
-message OrganizationSystemsResponse {
-  repeated ponix.v1.System systems = 1 [(buf.validate.field).required = true];
-}
-
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc Organization(OrganizationRequest) returns (OrganizationResponse);
-  rpc OrganizationUsers(OrganizationUsersRequest) returns (OrganizationUsersResponse);
-  rpc OrganizationSystems(OrganizationSystemsRequest) returns (OrganizationSystemsResponse);
 }

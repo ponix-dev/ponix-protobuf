@@ -3,31 +3,32 @@ syntax = "proto3";
 package organization.v1;
 
 import "buf/validate/validate.proto";
-
-enum UserStatus {
-  USER_STATUS_UNSPECIFIED = 0;
-  USER_STATUS_PENDING = 1;
-  USER_STATUS_ACTIVE = 2;
-  USER_STATUS_INACTIVE = 3;
-  USER_STATUS_ERROR = 4;
-}
+import "google/protobuf/timestamp.proto";
 
 message User {
   string id = 1 [(buf.validate.field).required = true];
   string first_name = 2 [(buf.validate.field).required = true];
   string last_name = 3 [(buf.validate.field).required = true];
-  string organization_id = 4 [(buf.validate.field).required = true];
-  UserStatus status = 5 [(buf.validate.field).required = true];
+  string email = 4 [(buf.validate.field).required = true];
+  string organization_id = 5 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 6 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp updated_at = 7 [(buf.validate.field).required = true];
 }
 
 message CreateUserRequest {
   string first_name = 1 [(buf.validate.field).required = true];
   string last_name = 2 [(buf.validate.field).required = true];
-  string organization_id = 3 [(buf.validate.field).required = true];
+  string email = 3 [(buf.validate.field).required = true];
+  string organization_id = 4 [(buf.validate.field).required = true];
 }
 
 message CreateUserResponse {
   string user_id = 1 [(buf.validate.field).required = true];
+  string first_name = 2 [(buf.validate.field).required = true];
+  string last_name = 3 [(buf.validate.field).required = true];
+  string email = 4 [(buf.validate.field).required = true];
+  string organization_id = 5 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 6 [(buf.validate.field).required = true];
 }
 
 message UserRequest {
