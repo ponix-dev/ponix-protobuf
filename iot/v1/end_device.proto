@@ -3,6 +3,12 @@ syntax = "proto3";
 package iot.v1;
 
 import "buf/validate/validate.proto";
+import "iot/v1/flow_sensor.proto";
+
+enum EndDeviceType {
+  END_DEVICE_TYPE_UNSPECIFIED = 0;
+  END_DEVICE_TYPE_FLOW_SENSOR = 1;
+}
 
 enum EndDeviceStatus {
   END_DEVICE_STATUS_UNSPECIFIED = 0;
@@ -15,15 +21,20 @@ enum EndDeviceStatus {
 message EndDevice {
   string id = 1 [(buf.validate.field).required = true];
   string name = 2 [(buf.validate.field).required = true];
-  EndDeviceStatus status = 3 [(buf.validate.field).required = true];
+  EndDeviceType type = 3 [(buf.validate.field).required = true];
+  EndDeviceStatus status = 4 [(buf.validate.field).required = true];
 }
 
 message CreateEndDeviceRequest {
   string name = 1 [(buf.validate.field).required = true];
+  EndDeviceType type = 2 [(buf.validate.field).required = true];
 }
 
 message CreateEndDeviceResponse {
   string end_device_id = 1 [(buf.validate.field).required = true];
+  string name = 2 [(buf.validate.field).required = true];
+  EndDeviceType type = 3 [(buf.validate.field).required = true];
+  EndDeviceStatus status = 4 [(buf.validate.field).required = true];
 }
 
 message EndDeviceRequest {
@@ -34,7 +45,27 @@ message EndDeviceResponse {
   EndDevice end_device = 1 [(buf.validate.field).required = true];
 }
 
+message OrganizationEndDevicesRequest {
+  string organization_id = 1 [(buf.validate.field).required = true];
+}
+
+message OrganizationEndDevicesResponse {
+  repeated EndDevice end_devices = 1 [(buf.validate.field).required = true];
+}
+
+message EndDeviceDataRequest {
+  string end_device_id = 1 [(buf.validate.field).required = true];
+}
+
+message EndDeviceDataResponse {
+  oneof data {
+    iot.v1.FlowSensorData flow_sensor_data = 1;
+  }
+}
+
 service EndDeviceService {
   rpc CreateEndDevice(CreateEndDeviceRequest) returns (CreateEndDeviceResponse);
   rpc EndDevice(EndDeviceRequest) returns (EndDeviceResponse);
+  rpc OrganizationEndDevices(OrganizationEndDevicesRequest) returns (OrganizationEndDevicesResponse);
+  rpc EndDeviceData(EndDeviceDataRequest) returns (EndDeviceDataResponse);
 }
