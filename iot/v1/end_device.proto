@@ -4,10 +4,18 @@ package iot.v1;
 
 import "buf/validate/validate.proto";
 import "iot/v1/flow_sensor.proto";
+import "iot/v1/lorawan.proto";
 
-enum EndDeviceType {
-  END_DEVICE_TYPE_UNSPECIFIED = 0;
-  END_DEVICE_TYPE_FLOW_SENSOR = 1;
+enum EndDeviceDataType {
+  END_DEVICE_DATA_TYPE_UNSPECIFIED = 0;
+  END_DEVICE_DATA_TYPE_FLOW_SENSOR = 1;
+}
+
+enum EndDeviceHardwareType {
+  END_DEVICE_HARDWARE_TYPE_UNSPECIFIED = 0;
+  END_DEVICE_HARDWARE_TYPE_LORAWAN = 1;
+  // Future: END_DEVICE_HARDWARE_TYPE_WIFI = 2;
+  // Future: END_DEVICE_HARDWARE_TYPE_CELLULAR = 3;
 }
 
 enum EndDeviceStatus {
@@ -21,20 +29,29 @@ enum EndDeviceStatus {
 message EndDevice {
   string id = 1 [(buf.validate.field).required = true];
   string name = 2 [(buf.validate.field).required = true];
-  EndDeviceType type = 3 [(buf.validate.field).required = true];
-  EndDeviceStatus status = 4 [(buf.validate.field).required = true];
+  EndDeviceStatus status = 3 [(buf.validate.field).required = true];
+  EndDeviceDataType data_type = 4 [(buf.validate.field).required = true];
+  EndDeviceHardwareType hardware_type = 5 [(buf.validate.field).required = true];
+  string description = 6;
+
+  // Hardware-specific configuration
+  oneof hardware_config {
+    iot.v1.LoRaWANConfig lorawan_config = 7;
+    // Future: WiFiConfig wifi_config = 8;
+    // Future: CellularConfig cellular_config = 9;
+  }
 }
 
 message CreateEndDeviceRequest {
   string name = 1 [(buf.validate.field).required = true];
-  EndDeviceType type = 2 [(buf.validate.field).required = true];
+  string description = 2;
+  string hardware_type_id = 3 [(buf.validate.field).required = true];
+  EndDeviceHardwareType hardware_type = 4 [(buf.validate.field).required = true];
+  EndDeviceDataType data_type = 5 [(buf.validate.field).required = true];
 }
 
 message CreateEndDeviceResponse {
-  string end_device_id = 1 [(buf.validate.field).required = true];
-  string name = 2 [(buf.validate.field).required = true];
-  EndDeviceType type = 3 [(buf.validate.field).required = true];
-  EndDeviceStatus status = 4 [(buf.validate.field).required = true];
+  EndDevice end_device = 1 [(buf.validate.field).required = true];
 }
 
 message EndDeviceRequest {
