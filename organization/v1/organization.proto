@@ -31,15 +31,15 @@ message CreateOrganizationResponse {
   google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
 }
 
-message OrganizationRequest {
+message GetOrganizationRequest {
   string organization_id = 1 [(buf.validate.field).required = true];
 }
 
-message OrganizationResponse {
+message GetOrganizationResponse {
   Organization organization = 1 [(buf.validate.field).required = true];
 }
 
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
-  rpc Organization(OrganizationRequest) returns (OrganizationResponse);
+  rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
 }
