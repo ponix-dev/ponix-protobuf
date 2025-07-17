@@ -39,7 +39,16 @@ message GetOrganizationResponse {
   Organization organization = 1 [(buf.validate.field).required = true];
 }
 
+message GetUserOrganizationsRequest {
+  string user_id = 1 [(buf.validate.field).required = true];
+}
+
+message GetUserOrganizationsResponse {
+  repeated Organization organizations = 1 [(buf.validate.field).required = true];
+}
+
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
+  rpc GetUserOrganizations(GetUserOrganizationsRequest) returns (GetUserOrganizationsResponse);
 }
