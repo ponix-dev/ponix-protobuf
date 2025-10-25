@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package envelope.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+message ProcessedEnvelope {
+  string end_device_id = 1;
+  google.protobuf.Timestamp occurred_at = 2;
+  google.protobuf.Struct data = 3;
+  google.protobuf.Timestamp processed_at = 4;
+}
