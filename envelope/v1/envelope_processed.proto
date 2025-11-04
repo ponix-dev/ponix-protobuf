@@ -10,4 +10,5 @@ message ProcessedEnvelope {
   google.protobuf.Timestamp occurred_at = 2;
   google.protobuf.Struct data = 3;
   google.protobuf.Timestamp processed_at = 4;
+  string organization_id = 5;
 }
