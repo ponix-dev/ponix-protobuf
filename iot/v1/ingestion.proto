@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package iot.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+// DataIngestionService handles device data ingestion
+service DataIngestionService {
+  // IngestDeviceData accepts telemetry data from devices
+  rpc IngestDeviceData(IngestDeviceDataRequest) returns (IngestDeviceDataResponse);
+}
+
+message IngestDeviceDataRequest {
+  // Organization ID that owns the device
+  string organization_id = 1 [(buf.validate.field).required = true];
+
+  // End device ID sending the data
+  string end_device_id = 2 [(buf.validate.field).required = true];
+
+  // Timestamp when data was collected (optional, defaults to server time)
+  google.protobuf.Timestamp occurred_at = 3;
+
+  // Flexible JSON data payload
+  google.protobuf.Struct data = 4 [(buf.validate.field).required = true];
+}
+
+message IngestDeviceDataResponse {
+  // Success confirmation
+  bool success = 1;
+
+  // Optional message
+  string message = 2;
+}

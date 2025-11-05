@@ -3,8 +3,8 @@ syntax = "proto3";
 package iot.v1;
 
 import "buf/validate/validate.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 
 // Request to query end device data with histogram aggregation
 message QueryEndDeviceDataRequest {
@@ -19,8 +19,8 @@ message QueryEndDeviceDataRequest {
   google.protobuf.Timestamp end_time = 4 [(buf.validate.field).required = true];
 
   option (buf.validate.message).cel = {
-    id: "end_time_after_start_time",
-    message: "end_time must be after start_time",
+    id: "end_time_after_start_time"
+    message: "end_time must be after start_time"
     expression: "this.end_time > this.start_time"
   };
 
