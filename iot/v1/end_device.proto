@@ -14,8 +14,9 @@ enum EndDeviceDataType {
 enum EndDeviceHardwareType {
   END_DEVICE_HARDWARE_TYPE_UNSPECIFIED = 0;
   END_DEVICE_HARDWARE_TYPE_LORAWAN = 1;
-  // Future: END_DEVICE_HARDWARE_TYPE_WIFI = 2;
-  // Future: END_DEVICE_HARDWARE_TYPE_CELLULAR = 3;
+  END_DEVICE_HARDWARE_TYPE_HTTP = 2;
+  // Future: END_DEVICE_HARDWARE_TYPE_WIFI = 3;
+  // Future: END_DEVICE_HARDWARE_TYPE_CELLULAR = 4;
 }
 
 enum EndDeviceStatus {
@@ -30,7 +31,7 @@ message EndDevice {
   string id = 1 [(buf.validate.field).required = true];
   string name = 2 [(buf.validate.field).required = true];
   EndDeviceStatus status = 3 [(buf.validate.field).required = true];
-  EndDeviceDataType data_type = 4 [(buf.validate.field).required = true];
+  EndDeviceDataType data_type = 4 [deprecated = true]; // Deprecated: use flexible data field in ingestion
   EndDeviceHardwareType hardware_type = 5 [(buf.validate.field).required = true];
   string description = 6;
 
@@ -47,7 +48,7 @@ message CreateEndDeviceRequest {
   string description = 2;
   string hardware_type_id = 3 [(buf.validate.field).required = true];
   EndDeviceHardwareType hardware_type = 4 [(buf.validate.field).required = true];
-  EndDeviceDataType data_type = 5 [(buf.validate.field).required = true];
+  EndDeviceDataType data_type = 5 [deprecated = true]; // Deprecated: not required for HTTP devices
 }
 
 message CreateEndDeviceResponse {
