@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package end_device.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+// EndDevice represents a device registered in the system.
+// Devices are scoped to organizations for multi-tenancy.
+message EndDevice {
+  // Server-generated unique identifier (UUID format)
+  string device_id = 1 [(buf.validate.field).required = true];
+
+  // Organization that owns this device
+  string organization_id = 2 [(buf.validate.field).required = true];
+
+  // Human-readable name for the device
+  string name = 3 [(buf.validate.field).required = true];
+
+  // When the device was created
+  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
+
+  // When the device was last updated
+  google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
+}
+
+// Request to create a new device
+// Device ID is generated server-side
+message CreateEndDeviceRequest {
+  // Organization that will own this device
+  string organization_id = 1 [(buf.validate.field).required = true];
+
+  // Human-readable name for the device
+  string name = 2 [(buf.validate.field).required = true];
+}
+
+// Response containing the newly created device
+message CreateEndDeviceResponse {
+  // The created device with server-generated ID and timestamps
+  EndDevice end_device = 1 [(buf.validate.field).required = true];
+}
+
+// Request to get a device by ID
+message GetEndDeviceRequest {
+  // Unique identifier of the device to retrieve
+  string device_id = 1 [(buf.validate.field).required = true];
+}
+
+// Response containing the requested device
+message GetEndDeviceResponse {
+  // The requested device
+  EndDevice end_device = 1 [(buf.validate.field).required = true];
+}
+
+// Request to list all devices for an organization
+message ListEndDevicesRequest {
+  // Organization ID to filter devices by
+  string organization_id = 1 [(buf.validate.field).required = true];
+}
+
+// Response containing devices for the organization
+message ListEndDevicesResponse {
+  // List of devices belonging to the organization
+  // No pagination for initial implementation
+  repeated EndDevice end_devices = 1;
+}
+
+// Service for managing device lifecycle
+service EndDeviceService {
+  // Register a new device
+  rpc CreateEndDevice(CreateEndDeviceRequest) returns (CreateEndDeviceResponse);
+
+  // Retrieve a device by its ID
+  rpc GetEndDevice(GetEndDeviceRequest) returns (GetEndDeviceResponse);
+
+  // List all devices for an organization
+  rpc ListEndDevices(ListEndDevicesRequest) returns (ListEndDevicesResponse);
+}

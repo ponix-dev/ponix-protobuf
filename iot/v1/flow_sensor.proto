@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package iot.v1;
-
-import "buf/validate/validate.proto";
-
-message FlowSensorData {
-  int64 flow_rate = 1 [(buf.validate.field).required = true];
-}
