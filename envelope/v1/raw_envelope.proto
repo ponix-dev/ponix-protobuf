@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package envelope.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message RawEnvelope {
+  string organization_id = 1;
+  string device_id = 2;
+  bytes payload = 3;
+  google.protobuf.Timestamp received_at = 4;
+}
