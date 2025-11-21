@@ -22,6 +22,9 @@ message EndDevice {
 
   // When the device was last updated
   google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
+
+  // Payload conversion logic for processing raw device data
+  string payload_conversion = 6;
 }
 
 // Request to create a new device
@@ -32,6 +35,9 @@ message CreateEndDeviceRequest {
 
   // Human-readable name for the device
   string name = 2 [(buf.validate.field).required = true];
+
+  // Payload conversion logic for processing raw device data
+  string payload_conversion = 3;
 }
 
 // Response containing the newly created device
