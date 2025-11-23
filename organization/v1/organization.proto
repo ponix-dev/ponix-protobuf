@@ -18,6 +18,7 @@ message Organization {
   OrganizationStatus status = 3 [(buf.validate.field).required = true];
   google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
   google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp deleted_at = 6;
 }
 
 message CreateOrganizationRequest {
@@ -39,16 +40,17 @@ message GetOrganizationResponse {
   Organization organization = 1 [(buf.validate.field).required = true];
 }
 
-message GetUserOrganizationsRequest {
-  string user_id = 1 [(buf.validate.field).required = true];
+message DeleteOrganizationRequest {
+  string organization_id = 1 [(buf.validate.field).required = true];
 }
 
-message GetUserOrganizationsResponse {
-  repeated Organization organizations = 1 [(buf.validate.field).required = true];
+message DeleteOrganizationResponse {
+  Organization organization = 1 [(buf.validate.field).required = true];
 }
+
 
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
-  rpc GetUserOrganizations(GetUserOrganizationsRequest) returns (GetUserOrganizationsResponse);
+  rpc DeleteOrganization(DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
 }
