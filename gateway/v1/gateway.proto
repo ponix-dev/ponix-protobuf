@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package end_device.v1;
+package gateway.v1;
 
 import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
@@ -98,6 +98,41 @@ message ListGatewaysResponse {
   repeated Gateway gateways = 1;
 }
 
+// Request to update a gateway
+message UpdateGatewayRequest {
+  // Unique identifier of the gateway to update
+  string gateway_id = 1 [(buf.validate.field).required = true];
+
+  // Optional: New name for the gateway
+  optional string name = 2;
+
+  // Optional: New status for the gateway
+  optional GatewayStatus status = 3;
+
+  // Optional: New type for the gateway
+  optional GatewayType type = 4;
+}
+
+// Response containing the updated gateway
+message UpdateGatewayResponse {
+  // The updated gateway with new timestamp
+  Gateway gateway = 1 [(buf.validate.field).required = true];
+}
+
+// Request to delete a gateway
+message DeleteGatewayRequest {
+  // Unique identifier of the gateway to delete
+  string gateway_id = 1 [(buf.validate.field).required = true];
+
+  // Organization ID owning the gateway
+  string organization_id = 2 [(buf.validate.field).required = true];
+}
+
+// Response confirming gateway deletion
+message DeleteGatewayResponse {
+  // Empty response - deletion confirmed by successful RPC
+}
+
 // Service for managing device lifecycle
 service GatewayService {
   // Register a new gateway
@@ -108,4 +143,10 @@ service GatewayService {
 
   // List all gateways for an organization
   rpc ListGateways(ListGatewaysRequest) returns (ListGatewaysResponse);
+
+  // Update an existing gateway
+  rpc UpdateGateway(UpdateGatewayRequest) returns (UpdateGatewayResponse);
+
+  // Delete a gateway
+  rpc DeleteGateway(DeleteGatewayRequest) returns (DeleteGatewayResponse);
 }
