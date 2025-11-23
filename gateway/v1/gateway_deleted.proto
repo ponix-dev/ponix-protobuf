@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package gateway.v1;
+
+import "buf/validate/validate.proto";
+import "gateway/v1/gateway.proto";
+
+message GatewayDeleted {
+  // The deleted gateway
+  gateway.v1.Gateway gateway = 1 [(buf.validate.field).required = true];
+}
