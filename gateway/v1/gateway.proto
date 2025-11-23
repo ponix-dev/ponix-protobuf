@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package end_device.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+enum GatewayStatus {
+  // Unknown status
+  GATEWAY_STATUS_UNSPECIFIED = 0;
+
+  // Gateway is active and operational
+  GATEWAY_STATUS_ACTIVE = 1;
+
+  // Gateway is offline
+  GATEWAY_STATUS_ERROR = 2;
+
+  // Gateway is pending activation
+  GATEWAY_STATUS_PENDING = 3;
+}
+
+enum GatewayType {
+    // Unknown type
+    GATEWAY_TYPE_UNSPECIFIED = 0;
+    
+    // EMQX Gateway
+    GATEWAY_TYPE_EMQX = 1;
+}
+
+// Gateway represents a gateway registered in the system
+// for ingesting data from end devices.
+message Gateway {
+  // Server-generated unique identifier (UUID format)
+  string gateway_id = 1 [(buf.validate.field).required = true];
+
+  // Organization that owns this gateway
+  string organization_id = 2 [(buf.validate.field).required = true];
+
+  // Human-readable name for the gateway
+  string name = 3 [(buf.validate.field).required = true];
+
+  // Current status of the gateway
+  GatewayStatus status = 4 [(buf.validate.field).required = true];
+
+  // Type of the gateway
+  GatewayType type = 5 [(buf.validate.field).required = true];
+
+  // When the gateway was created
+  google.protobuf.Timestamp created_at = 6 [(buf.validate.field).required = true];
+
+  // When the gateway was last updated
+  google.protobuf.Timestamp updated_at = 7 [(buf.validate.field).required = true];
+
+  // When the gateway was deleted
+  google.protobuf.Timestamp deleted_at = 8;
+}
+
+// Request to create a gateway
+// Device ID is generated server-side
+message CreateGatewayRequest {
+  // Organization that will own this device
+  string organization_id = 1 [(buf.validate.field).required = true];
+
+  // Human-readable name for the device
+  string name = 2 [(buf.validate.field).required = true];
+
+  GatewayType type = 3 [(buf.validate.field).required = true];
+}
+
+// Response containing the newly created gateway
+message CreateGatewayResponse {
+  // The created gateway with server-generated ID and timestamps
+  Gateway gateway = 1 [(buf.validate.field).required = true];
+}
+
+// Request to get a gateway by ID
+message GetGatewayRequest {
+  // Unique identifier of the gateway to retrieve
+  string gateway_id = 1 [(buf.validate.field).required = true];
+}
+
+// Response containing the requested gateway
+message GetGatewayResponse {
+  // The requested gateway
+  Gateway gateway = 1 [(buf.validate.field).required = true];
+}
+
+// Request to list all gateways for an organization
+message ListGatewaysRequest {
+  // Organization ID to filter gateways by
+  string organization_id = 1 [(buf.validate.field).required = true];
+}
+
+// Response containing gateways for the organization
+message ListGatewaysResponse {
+  // List of gateways belonging to the organization
+  // No pagination for initial implementation
+  repeated Gateway gateways = 1;
+}
+
+// Service for managing device lifecycle
+service GatewayService {
+  // Register a new gateway
+  rpc CreateGateway(CreateGatewayRequest) returns (CreateGatewayResponse);
+
+  // Retrieve a gateway by its ID
+  rpc GetGateway(GetGatewayRequest) returns (GetGatewayResponse);
+
+  // List all gateways for an organization
+  rpc ListGateways(ListGatewaysRequest) returns (ListGatewaysResponse);
+}
