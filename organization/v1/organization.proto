@@ -1,8 +1,7 @@
 syntax = "proto3";
 
 package organization.v1;
-
-import "buf/validate/validate.proto";
+ 
 import "google/protobuf/timestamp.proto";
 
 enum OrganizationStatus {
@@ -13,39 +12,39 @@ enum OrganizationStatus {
 }
 
 message Organization {
-  string id = 1 [(buf.validate.field).required = true];
-  string name = 2 [(buf.validate.field).required = true];
-  OrganizationStatus status = 3 [(buf.validate.field).required = true];
-  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
-  google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
+  string id = 1;
+  string name = 2;
+  OrganizationStatus status = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
   google.protobuf.Timestamp deleted_at = 6;
 }
 
 message CreateOrganizationRequest {
-  string name = 1 [(buf.validate.field).required = true];
+  string name = 1;
 }
 
 message CreateOrganizationResponse {
-  string organization_id = 1 [(buf.validate.field).required = true];
-  string name = 2 [(buf.validate.field).required = true];
-  OrganizationStatus status = 3 [(buf.validate.field).required = true];
-  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
+  string organization_id = 1;
+  string name = 2;
+  OrganizationStatus status = 3;
+  google.protobuf.Timestamp created_at = 4;
 }
 
 message GetOrganizationRequest {
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 }
 
 message GetOrganizationResponse {
-  Organization organization = 1 [(buf.validate.field).required = true];
+  Organization organization = 1;
 }
 
 message DeleteOrganizationRequest {
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 }
 
 message DeleteOrganizationResponse {
-  Organization organization = 1 [(buf.validate.field).required = true];
+  Organization organization = 1;
 }
 
 

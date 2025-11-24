@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package gateway.v1;
 
-import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 
 enum GatewayStatus {
@@ -31,25 +30,25 @@ enum GatewayType {
 // for ingesting data from end devices.
 message Gateway {
   // Server-generated unique identifier (UUID format)
-  string gateway_id = 1 [(buf.validate.field).required = true];
+  string gateway_id = 1;
 
   // Organization that owns this gateway
-  string organization_id = 2 [(buf.validate.field).required = true];
+  string organization_id = 2;
 
   // Human-readable name for the gateway
-  string name = 3 [(buf.validate.field).required = true];
+  string name = 3;
 
   // Current status of the gateway
-  GatewayStatus status = 4 [(buf.validate.field).required = true];
+  GatewayStatus status = 4;
 
   // Type of the gateway
-  GatewayType type = 5 [(buf.validate.field).required = true];
+  GatewayType type = 5;
 
   // When the gateway was created
-  google.protobuf.Timestamp created_at = 6 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 6;
 
   // When the gateway was last updated
-  google.protobuf.Timestamp updated_at = 7 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp updated_at = 7;
 
   // When the gateway was deleted
   google.protobuf.Timestamp deleted_at = 8;
@@ -59,36 +58,36 @@ message Gateway {
 // Device ID is generated server-side
 message CreateGatewayRequest {
   // Organization that will own this device
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 
   // Human-readable name for the device
-  string name = 2 [(buf.validate.field).required = true];
+  string name = 2;
 
-  GatewayType type = 3 [(buf.validate.field).required = true];
+  GatewayType type = 3;
 }
 
 // Response containing the newly created gateway
 message CreateGatewayResponse {
   // The created gateway with server-generated ID and timestamps
-  Gateway gateway = 1 [(buf.validate.field).required = true];
+  Gateway gateway = 1;
 }
 
 // Request to get a gateway by ID
 message GetGatewayRequest {
   // Unique identifier of the gateway to retrieve
-  string gateway_id = 1 [(buf.validate.field).required = true];
+  string gateway_id = 1;
 }
 
 // Response containing the requested gateway
 message GetGatewayResponse {
   // The requested gateway
-  Gateway gateway = 1 [(buf.validate.field).required = true];
+  Gateway gateway = 1;
 }
 
 // Request to list all gateways for an organization
 message ListGatewaysRequest {
   // Organization ID to filter gateways by
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 }
 
 // Response containing gateways for the organization
@@ -101,7 +100,7 @@ message ListGatewaysResponse {
 // Request to update a gateway
 message UpdateGatewayRequest {
   // Unique identifier of the gateway to update
-  string gateway_id = 1 [(buf.validate.field).required = true];
+  string gateway_id = 1;
 
   // Optional: New name for the gateway
   optional string name = 2;
@@ -116,16 +115,16 @@ message UpdateGatewayRequest {
 // Response containing the updated gateway
 message UpdateGatewayResponse {
   // The updated gateway with new timestamp
-  Gateway gateway = 1 [(buf.validate.field).required = true];
+  Gateway gateway = 1;
 }
 
 // Request to delete a gateway
 message DeleteGatewayRequest {
   // Unique identifier of the gateway to delete
-  string gateway_id = 1 [(buf.validate.field).required = true];
+  string gateway_id = 1;
 
   // Organization ID owning the gateway
-  string organization_id = 2 [(buf.validate.field).required = true];
+  string organization_id = 2;
 }
 
 // Response confirming gateway deletion

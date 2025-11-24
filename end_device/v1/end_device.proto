@@ -2,26 +2,25 @@ syntax = "proto3";
 
 package end_device.v1;
 
-import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 
 // EndDevice represents a device registered in the system.
 // Devices are scoped to organizations for multi-tenancy.
 message EndDevice {
   // Server-generated unique identifier (UUID format)
-  string device_id = 1 [(buf.validate.field).required = true];
+  string device_id = 1;
 
   // Organization that owns this device
-  string organization_id = 2 [(buf.validate.field).required = true];
+  string organization_id = 2;
 
   // Human-readable name for the device
-  string name = 3 [(buf.validate.field).required = true];
+  string name = 3;
 
   // When the device was created
-  google.protobuf.Timestamp created_at = 4 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp created_at = 4;
 
   // When the device was last updated
-  google.protobuf.Timestamp updated_at = 5 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp updated_at = 5;
 
   // Payload conversion logic for processing raw device data
   string payload_conversion = 6;
@@ -31,10 +30,10 @@ message EndDevice {
 // Device ID is generated server-side
 message CreateEndDeviceRequest {
   // Organization that will own this device
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 
   // Human-readable name for the device
-  string name = 2 [(buf.validate.field).required = true];
+  string name = 2;
 
   // Payload conversion logic for processing raw device data
   string payload_conversion = 3;
@@ -43,25 +42,25 @@ message CreateEndDeviceRequest {
 // Response containing the newly created device
 message CreateEndDeviceResponse {
   // The created device with server-generated ID and timestamps
-  EndDevice end_device = 1 [(buf.validate.field).required = true];
+  EndDevice end_device = 1;
 }
 
 // Request to get a device by ID
 message GetEndDeviceRequest {
   // Unique identifier of the device to retrieve
-  string device_id = 1 [(buf.validate.field).required = true];
+  string device_id = 1;
 }
 
 // Response containing the requested device
 message GetEndDeviceResponse {
   // The requested device
-  EndDevice end_device = 1 [(buf.validate.field).required = true];
+  EndDevice end_device = 1;
 }
 
 // Request to list all devices for an organization
 message ListEndDevicesRequest {
   // Organization ID to filter devices by
-  string organization_id = 1 [(buf.validate.field).required = true];
+  string organization_id = 1;
 }
 
 // Response containing devices for the organization
