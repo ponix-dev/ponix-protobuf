@@ -26,6 +26,12 @@ enum GatewayType {
     GATEWAY_TYPE_EMQX = 1;
 }
 
+message EMQXGatewayConfig {
+  // URL of the EMQX broker
+  string broker_url = 1;
+}
+
+
 // Gateway represents a gateway registered in the system
 // for ingesting data from end devices.
 message Gateway {
@@ -52,6 +58,11 @@ message Gateway {
 
   // When the gateway was deleted
   google.protobuf.Timestamp deleted_at = 8;
+
+  oneof config {
+    // EMQX Gateway configuration
+    EMQXGatewayConfig emqx_config = 9;
+  }
 }
 
 // Request to create a gateway
@@ -64,6 +75,11 @@ message CreateGatewayRequest {
   string name = 2;
 
   GatewayType type = 3;
+
+  oneof config {
+    // EMQX Gateway configuration
+    EMQXGatewayConfig emqx_config = 4;
+  }
 }
 
 // Response containing the newly created gateway
@@ -103,13 +119,18 @@ message UpdateGatewayRequest {
   string gateway_id = 1;
 
   // Optional: New name for the gateway
-  optional string name = 2;
+  string name = 2;
 
   // Optional: New status for the gateway
-  optional GatewayStatus status = 3;
+  GatewayStatus status = 3;
 
   // Optional: New type for the gateway
-  optional GatewayType type = 4;
+  GatewayType type = 4;
+
+  oneof config {
+    // EMQX Gateway configuration
+    EMQXGatewayConfig emqx_config = 5;
+  }
 }
 
 // Response containing the updated gateway
