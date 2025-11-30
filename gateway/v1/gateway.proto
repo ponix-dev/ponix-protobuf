@@ -29,6 +29,7 @@ enum GatewayType {
 message EMQXGatewayConfig {
   // URL of the EMQX broker
   string broker_url = 1;
+  string subscription_group = 2;
 }
 
 

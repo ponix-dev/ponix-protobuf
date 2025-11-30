@@ -47,9 +47,16 @@ message DeleteOrganizationResponse {
   Organization organization = 1;
 }
 
+message ListOrganizationsRequest {}
+
+message ListOrganizationsResponse {
+  repeated Organization organizations = 1;
+} 
+
 
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
   rpc DeleteOrganization(DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
+  rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse);
 }
