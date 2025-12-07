@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package organization.v1;
- 
+
 import "google/protobuf/timestamp.proto";
 
 enum OrganizationStatus {
@@ -51,12 +51,20 @@ message ListOrganizationsRequest {}
 
 message ListOrganizationsResponse {
   repeated Organization organizations = 1;
-} 
+}
 
+message UserOrganizationsRequest {
+  string user_id = 1;
+}
+
+message UserOrganizationsResponse {
+  repeated Organization organizations = 1;
+}
 
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc GetOrganization(GetOrganizationRequest) returns (GetOrganizationResponse);
   rpc DeleteOrganization(DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
   rpc ListOrganizations(ListOrganizationsRequest) returns (ListOrganizationsResponse);
+  rpc UserOrganizations(UserOrganizationsRequest) returns (UserOrganizationsResponse);
 }

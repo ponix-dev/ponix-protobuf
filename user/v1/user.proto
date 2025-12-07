@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// User represents a registered user in the system.
+message User {
+  // Server-generated unique identifier
+  string id = 1;
+
+  // User's email address (unique)
+  string email = 2;
+
+  // User's display name
+  string name = 3;
+
+  // When the user was created
+  google.protobuf.Timestamp created_at = 4;
+
+  // When the user was last updated
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// Request to register a new user
+// User ID is generated server-side
+// Password is hashed server-side using Argon2
+message RegisterUserRequest {
+  // User's email address (must be unique)
+  string email = 1;
+
+  // User's password (will be hashed server-side)
+  string password = 2;
+
+  // User's display name
+  string name = 3;
+}
+
+// Response containing the newly registered user
+message RegisterUserResponse {
+  // The registered user with server-generated ID and timestamps
+  User user = 1;
+}
+
+// Request to get a user by ID
+message GetUserRequest {
+  // Unique identifier of the user to retrieve
+  string user_id = 1;
+}
+
+// Response containing the requested user
+message GetUserResponse {
+  // The requested user
+  User user = 1;
+}
+
+// Request to login a user
+message LoginRequest {
+  // User's email address
+  string email = 1;
+
+  // User's password
+  string password = 2;
+}
+
+// Response containing the JWT token
+message LoginResponse {
+  // JWT access token for authenticated requests
+  // Refresh token is set via Set-Cookie header, not in response body
+  string token = 1;
+}
+
+// Request to refresh access token
+// Refresh token is read from cookie, not from request body
+message RefreshRequest {}
+
+// Response containing new access token
+message RefreshResponse {
+  // New JWT access token
+  // New refresh token is set via Set-Cookie header
+  string access_token = 1;
+}
+
+// Request to logout and invalidate refresh token
+// Refresh token is read from cookie, not from request body
+message LogoutRequest {}
+
+// Response indicating successful logout
+message LogoutResponse {}
+
+// Service for user registration and management
+service UserService {
+  // Register a new user
+  rpc RegisterUser(RegisterUserRequest) returns (RegisterUserResponse);
+
+  // Retrieve a user by their ID
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+
+  // Login with email and password, returns JWT token
+  // Sets refresh token as HTTP-only cookie
+  rpc Login(LoginRequest) returns (LoginResponse);
+
+  // Refresh access token using refresh token from cookie
+  // Rotates refresh token (old token invalidated, new token set in cookie)
+  rpc Refresh(RefreshRequest) returns (RefreshResponse);
+
+  // Logout and invalidate refresh token
+  // Clears refresh token cookie
+  rpc Logout(LogoutRequest) returns (LogoutResponse);
+}
