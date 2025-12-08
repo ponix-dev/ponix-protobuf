@@ -49,6 +49,9 @@ message CreateEndDeviceResponse {
 message GetEndDeviceRequest {
   // Unique identifier of the device to retrieve
   string device_id = 1;
+
+  // Organization ID owning the device
+  string organization_id = 2;
 }
 
 // Response containing the requested device

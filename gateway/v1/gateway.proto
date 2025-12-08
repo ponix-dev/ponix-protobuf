@@ -93,6 +93,9 @@ message CreateGatewayResponse {
 message GetGatewayRequest {
   // Unique identifier of the gateway to retrieve
   string gateway_id = 1;
+
+  // Organization ID owning the gateway
+  string organization_id = 2;
 }
 
 // Response containing the requested gateway
@@ -132,6 +135,9 @@ message UpdateGatewayRequest {
     // EMQX Gateway configuration
     EMQXGatewayConfig emqx_config = 5;
   }
+
+  // Organization ID owning the gateway
+  string organization_id = 6;
 }
 
 // Response containing the updated gateway
