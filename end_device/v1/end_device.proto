@@ -13,17 +13,17 @@ message EndDevice {
   // Organization that owns this device
   string organization_id = 2;
 
+  // Reference to the EndDeviceDefinition
+  string definition_id = 3;
+
   // Human-readable name for the device
-  string name = 3;
+  string name = 4;
 
   // When the device was created
-  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp created_at = 5;
 
   // When the device was last updated
-  google.protobuf.Timestamp updated_at = 5;
-
-  // Payload conversion logic for processing raw device data
-  string payload_conversion = 6;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 // Request to create a new device
@@ -32,11 +32,11 @@ message CreateEndDeviceRequest {
   // Organization that will own this device
   string organization_id = 1;
 
-  // Human-readable name for the device
-  string name = 2;
+  // Reference to the EndDeviceDefinition (required)
+  string definition_id = 2;
 
-  // Payload conversion logic for processing raw device data
-  string payload_conversion = 3;
+  // Human-readable name for the device
+  string name = 3;
 }
 
 // Response containing the newly created device

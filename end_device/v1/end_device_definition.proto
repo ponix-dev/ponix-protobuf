@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package end_device.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// EndDeviceDefinition holds JSON Schema for payload validation and payload conversion logic
+message EndDeviceDefinition {
+  // Server-generated unique identifier
+  string id = 1;
+
+  // Organization that owns this definition
+  string organization_id = 2;
+
+  // Human-readable name for the definition
+  string name = 3;
+
+  // JSON Schema string for validating device payloads
+  string json_schema = 4;
+
+  // Payload conversion logic for processing raw device data
+  string payload_conversion = 5;
+
+  // When the definition was created
+  google.protobuf.Timestamp created_at = 6;
+
+  // When the definition was last updated
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// Request to create an end device definition
+message CreateEndDeviceDefinitionRequest {
+  // Organization that will own this definition
+  string organization_id = 1;
+
+  // Human-readable name for the definition
+  string name = 2;
+
+  // JSON Schema string for validating device payloads
+  string json_schema = 3;
+
+  // Payload conversion logic for processing raw device data
+  string payload_conversion = 4;
+}
+
+// Response containing the newly created definition
+message CreateEndDeviceDefinitionResponse {
+  // The created definition with server-generated ID and timestamps
+  EndDeviceDefinition end_device_definition = 1;
+}
+
+// Request to get an end device definition by ID
+message GetEndDeviceDefinitionRequest {
+  // Unique identifier of the definition to retrieve
+  string id = 1;
+
+  // Organization ID owning the definition
+  string organization_id = 2;
+}
+
+// Response containing the requested definition
+message GetEndDeviceDefinitionResponse {
+  // The requested definition
+  EndDeviceDefinition end_device_definition = 1;
+}
+
+// Request to update an end device definition
+message UpdateEndDeviceDefinitionRequest {
+  // Unique identifier of the definition to update
+  string id = 1;
+
+  // Organization ID owning the definition
+  string organization_id = 2;
+
+  // Optional new name for the definition
+  optional string name = 3;
+
+  // Optional new JSON Schema string
+  optional string json_schema = 4;
+
+  // Optional new payload conversion logic
+  optional string payload_conversion = 5;
+}
+
+// Response containing the updated definition
+message UpdateEndDeviceDefinitionResponse {
+  // The updated definition
+  EndDeviceDefinition end_device_definition = 1;
+}
+
+// Request to delete an end device definition
+message DeleteEndDeviceDefinitionRequest {
+  // Unique identifier of the definition to delete
+  string id = 1;
+
+  // Organization ID owning the definition
+  string organization_id = 2;
+}
+
+// Response for delete operation (empty on success)
+message DeleteEndDeviceDefinitionResponse {}
+
+// Request to list end device definitions for an organization
+message ListEndDeviceDefinitionsRequest {
+  // Organization ID to filter definitions by
+  string organization_id = 1;
+}
+
+// Response containing definitions for the organization
+message ListEndDeviceDefinitionsResponse {
+  // List of definitions belonging to the organization
+  repeated EndDeviceDefinition end_device_definitions = 1;
+}
+
+// Service for managing end device definitions
+service EndDeviceDefinitionService {
+  // Create a new definition
+  rpc CreateEndDeviceDefinition(CreateEndDeviceDefinitionRequest) returns (CreateEndDeviceDefinitionResponse);
+
+  // Retrieve a definition by its ID
+  rpc GetEndDeviceDefinition(GetEndDeviceDefinitionRequest) returns (GetEndDeviceDefinitionResponse);
+
+  // Update an existing definition
+  rpc UpdateEndDeviceDefinition(UpdateEndDeviceDefinitionRequest) returns (UpdateEndDeviceDefinitionResponse);
+
+  // Delete a definition (fails if devices reference it)
+  rpc DeleteEndDeviceDefinition(DeleteEndDeviceDefinitionRequest) returns (DeleteEndDeviceDefinitionResponse);
+
+  // List all definitions for an organization
+  rpc ListEndDeviceDefinitions(ListEndDeviceDefinitionsRequest) returns (ListEndDeviceDefinitionsResponse);
+}
