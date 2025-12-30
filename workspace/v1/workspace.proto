@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package workspace.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum WorkspaceStatus {
+  WORKSPACE_STATUS_UNSPECIFIED = 0;
+  WORKSPACE_STATUS_ACTIVE = 1;
+  WORKSPACE_STATUS_DELETED = 2;
+}
+
+message Workspace {
+  string id = 1;
+  string name = 2;
+  string organization_id = 3;
+  WorkspaceStatus status = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  google.protobuf.Timestamp deleted_at = 7;
+}
+
+message CreateWorkspaceRequest {
+  string organization_id = 1;
+  string name = 2;
+}
+
+message CreateWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message GetWorkspaceRequest {
+  string workspace_id = 1;
+  string organization_id = 2;
+}
+
+message GetWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message UpdateWorkspaceRequest {
+  string workspace_id = 1;
+  string organization_id = 2;
+  string name = 3;
+}
+
+message UpdateWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message DeleteWorkspaceRequest {
+  string workspace_id = 1;
+  string organization_id = 2;
+}
+
+message DeleteWorkspaceResponse {
+  Workspace workspace = 1;
+}
+
+message ListWorkspacesRequest {
+  string organization_id = 1;
+}
+
+message ListWorkspacesResponse {
+  repeated Workspace workspaces = 1;
+}
+
+service WorkspaceService {
+  rpc CreateWorkspace(CreateWorkspaceRequest) returns (CreateWorkspaceResponse);
+  rpc GetWorkspace(GetWorkspaceRequest) returns (GetWorkspaceResponse);
+  rpc UpdateWorkspace(UpdateWorkspaceRequest) returns (UpdateWorkspaceResponse);
+  rpc DeleteWorkspace(DeleteWorkspaceRequest) returns (DeleteWorkspaceResponse);
+  rpc ListWorkspaces(ListWorkspacesRequest) returns (ListWorkspacesResponse);
+}
