@@ -58,6 +58,9 @@ message GetEndDeviceRequest {
 
   // Organization ID owning the device
   string organization_id = 2;
+
+  // Workspace ID containing the device
+  string workspace_id = 3;
 }
 
 // Response containing the requested device
@@ -66,16 +69,18 @@ message GetEndDeviceResponse {
   EndDevice end_device = 1;
 }
 
-// Request to list all devices for an organization
-message ListEndDevicesRequest {
-  // Organization ID to filter devices by
+// Request to get all devices for a workspace
+message GetWorkspaceEndDevicesRequest {
+  // Organization ID owning the workspace
   string organization_id = 1;
+
+  // Workspace ID to filter devices by
+  string workspace_id = 2;
 }
 
-// Response containing devices for the organization
-message ListEndDevicesResponse {
-  // List of devices belonging to the organization
-  // No pagination for initial implementation
+// Response containing devices for the workspace
+message GetWorkspaceEndDevicesResponse {
+  // List of devices belonging to the workspace
   repeated EndDevice end_devices = 1;
 }
 
@@ -87,6 +92,6 @@ service EndDeviceService {
   // Retrieve a device by its ID
   rpc GetEndDevice(GetEndDeviceRequest) returns (GetEndDeviceResponse);
 
-  // List all devices for an organization
-  rpc ListEndDevices(ListEndDevicesRequest) returns (ListEndDevicesResponse);
+  // Get all devices for a workspace
+  rpc GetWorkspaceEndDevices(GetWorkspaceEndDevicesRequest) returns (GetWorkspaceEndDevicesResponse);
 }
