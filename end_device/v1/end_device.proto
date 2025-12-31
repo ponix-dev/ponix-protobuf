@@ -27,6 +27,9 @@ message EndDevice {
 
   // Workspace this device belongs to
   string workspace_id = 7;
+
+  // Gateway this device is connected to
+  string gateway_id = 8;
 }
 
 // Request to create a new device
@@ -43,6 +46,9 @@ message CreateEndDeviceRequest {
 
   // Workspace this device belongs to
   string workspace_id = 4;
+
+  // Gateway this device connects to
+  string gateway_id = 5;
 }
 
 // Response containing the newly created device
@@ -84,6 +90,21 @@ message GetWorkspaceEndDevicesResponse {
   repeated EndDevice end_devices = 1;
 }
 
+// Request to get all devices connected to a gateway
+message GetGatewayEndDevicesRequest {
+  // Organization ID owning the gateway
+  string organization_id = 1;
+
+  // Gateway ID to filter devices by
+  string gateway_id = 2;
+}
+
+// Response containing devices connected to the gateway
+message GetGatewayEndDevicesResponse {
+  // List of devices connected to the gateway
+  repeated EndDevice end_devices = 1;
+}
+
 // Service for managing device lifecycle
 service EndDeviceService {
   // Register a new device
@@ -94,4 +115,7 @@ service EndDeviceService {
 
   // Get all devices for a workspace
   rpc GetWorkspaceEndDevices(GetWorkspaceEndDevicesRequest) returns (GetWorkspaceEndDevicesResponse);
+
+  // Get all devices connected to a gateway
+  rpc GetGatewayEndDevices(GetGatewayEndDevicesRequest) returns (GetGatewayEndDevicesResponse);
 }
