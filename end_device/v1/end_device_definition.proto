@@ -4,7 +4,22 @@ package end_device.v1;
 
 import "google/protobuf/timestamp.proto";
 
-// EndDeviceDefinition holds JSON Schema for payload validation and payload conversion logic
+// A single payload processing contract: match -> transform -> validate
+message PayloadContract {
+  // CEL expression that determines if this contract applies to a given payload.
+  // Evaluated against the raw payload; must return a boolean.
+  // Use "true" for a contract that always matches.
+  string match_expression = 1;
+
+  // CEL expression that transforms the raw payload into JSON.
+  // Only executed if match_expression evaluates to true.
+  string transform_expression = 2;
+
+  // JSON Schema string for validating the transformed output.
+  string json_schema = 3;
+}
+
+// EndDeviceDefinition holds payload contracts for device processing
 message EndDeviceDefinition {
   // Server-generated unique identifier
   string id = 1;
@@ -15,17 +30,14 @@ message EndDeviceDefinition {
   // Human-readable name for the definition
   string name = 3;
 
-  // JSON Schema string for validating device payloads
-  string json_schema = 4;
-
-  // Payload conversion logic for processing raw device data
-  string payload_conversion = 5;
+  // Ordered list of payload processing contracts
+  repeated PayloadContract contracts = 4;
 
   // When the definition was created
-  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp created_at = 5;
 
   // When the definition was last updated
-  google.protobuf.Timestamp updated_at = 7;
+  google.protobuf.Timestamp updated_at = 6;
 }
 
 // Request to create an end device definition
@@ -36,11 +48,8 @@ message CreateEndDeviceDefinitionRequest {
   // Human-readable name for the definition
   string name = 2;
 
-  // JSON Schema string for validating device payloads
-  string json_schema = 3;
-
-  // Payload conversion logic for processing raw device data
-  string payload_conversion = 4;
+  // Ordered list of payload processing contracts
+  repeated PayloadContract contracts = 3;
 }
 
 // Response containing the newly created definition
@@ -75,11 +84,10 @@ message UpdateEndDeviceDefinitionRequest {
   // Optional new name for the definition
   optional string name = 3;
 
-  // Optional new JSON Schema string
-  optional string json_schema = 4;
-
-  // Optional new payload conversion logic
-  optional string payload_conversion = 5;
+  // Updated list of payload processing contracts.
+  // When non-empty, replaces the entire contracts list.
+  // When empty, contracts are left unchanged.
+  repeated PayloadContract contracts = 4;
 }
 
 // Response containing the updated definition
