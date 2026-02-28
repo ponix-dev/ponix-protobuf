@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package data_stream.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// DataStream represents a named, configured source of time-series data.
+// Data streams are scoped to organizations for multi-tenancy.
+message DataStream {
+  // Server-generated unique identifier (UUID format)
+  string data_stream_id = 1;
+
+  // Organization that owns this data stream
+  string organization_id = 2;
+
+  // Reference to the DataStreamDefinition
+  string definition_id = 3;
+
+  // Human-readable name for the data stream
+  string name = 4;
+
+  // When the data stream was created
+  google.protobuf.Timestamp created_at = 5;
+
+  // When the data stream was last updated
+  google.protobuf.Timestamp updated_at = 6;
+
+  // Workspace this data stream belongs to
+  string workspace_id = 7;
+
+  // Gateway this data stream is connected to
+  string gateway_id = 8;
+}
+
+// Request to create a new data stream
+// Data stream ID is generated server-side
+message CreateDataStreamRequest {
+  // Organization that will own this data stream
+  string organization_id = 1;
+
+  // Reference to the DataStreamDefinition (required)
+  string definition_id = 2;
+
+  // Human-readable name for the data stream
+  string name = 3;
+
+  // Workspace this data stream belongs to
+  string workspace_id = 4;
+
+  // Gateway this data stream connects to
+  string gateway_id = 5;
+}
+
+// Response containing the newly created data stream
+message CreateDataStreamResponse {
+  // The created data stream with server-generated ID and timestamps
+  DataStream data_stream = 1;
+}
+
+// Request to get a data stream by ID
+message GetDataStreamRequest {
+  // Unique identifier of the data stream to retrieve
+  string data_stream_id = 1;
+
+  // Organization ID owning the data stream
+  string organization_id = 2;
+
+  // Workspace ID containing the data stream
+  string workspace_id = 3;
+}
+
+// Response containing the requested data stream
+message GetDataStreamResponse {
+  // The requested data stream
+  DataStream data_stream = 1;
+}
+
+// Request to get all data streams for a workspace
+message GetWorkspaceDataStreamsRequest {
+  // Organization ID owning the workspace
+  string organization_id = 1;
+
+  // Workspace ID to filter data streams by
+  string workspace_id = 2;
+}
+
+// Response containing data streams for the workspace
+message GetWorkspaceDataStreamsResponse {
+  // List of data streams belonging to the workspace
+  repeated DataStream data_streams = 1;
+}
+
+// Request to get all data streams connected to a gateway
+message GetGatewayDataStreamsRequest {
+  // Organization ID owning the gateway
+  string organization_id = 1;
+
+  // Gateway ID to filter data streams by
+  string gateway_id = 2;
+}
+
+// Response containing data streams connected to the gateway
+message GetGatewayDataStreamsResponse {
+  // List of data streams connected to the gateway
+  repeated DataStream data_streams = 1;
+}
+
+// Service for managing data stream lifecycle
+service DataStreamService {
+  // Register a new data stream
+  rpc CreateDataStream(CreateDataStreamRequest) returns (CreateDataStreamResponse);
+
+  // Retrieve a data stream by its ID
+  rpc GetDataStream(GetDataStreamRequest) returns (GetDataStreamResponse);
+
+  // Get all data streams for a workspace
+  rpc GetWorkspaceDataStreams(GetWorkspaceDataStreamsRequest) returns (GetWorkspaceDataStreamsResponse);
+
+  // Get all data streams connected to a gateway
+  rpc GetGatewayDataStreams(GetGatewayDataStreamsRequest) returns (GetGatewayDataStreamsResponse);
+}

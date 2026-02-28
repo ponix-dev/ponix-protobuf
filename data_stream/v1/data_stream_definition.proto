@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package end_device.v1;
+package data_stream.v1;
 
 import "google/protobuf/timestamp.proto";
 
@@ -19,8 +19,8 @@ message PayloadContract {
   string json_schema = 3;
 }
 
-// EndDeviceDefinition holds payload contracts for device processing
-message EndDeviceDefinition {
+// DataStreamDefinition holds payload contracts for data stream processing
+message DataStreamDefinition {
   // Server-generated unique identifier
   string id = 1;
 
@@ -40,8 +40,8 @@ message EndDeviceDefinition {
   google.protobuf.Timestamp updated_at = 6;
 }
 
-// Request to create an end device definition
-message CreateEndDeviceDefinitionRequest {
+// Request to create a data stream definition
+message CreateDataStreamDefinitionRequest {
   // Organization that will own this definition
   string organization_id = 1;
 
@@ -53,13 +53,13 @@ message CreateEndDeviceDefinitionRequest {
 }
 
 // Response containing the newly created definition
-message CreateEndDeviceDefinitionResponse {
+message CreateDataStreamDefinitionResponse {
   // The created definition with server-generated ID and timestamps
-  EndDeviceDefinition end_device_definition = 1;
+  DataStreamDefinition data_stream_definition = 1;
 }
 
-// Request to get an end device definition by ID
-message GetEndDeviceDefinitionRequest {
+// Request to get a data stream definition by ID
+message GetDataStreamDefinitionRequest {
   // Unique identifier of the definition to retrieve
   string id = 1;
 
@@ -68,13 +68,13 @@ message GetEndDeviceDefinitionRequest {
 }
 
 // Response containing the requested definition
-message GetEndDeviceDefinitionResponse {
+message GetDataStreamDefinitionResponse {
   // The requested definition
-  EndDeviceDefinition end_device_definition = 1;
+  DataStreamDefinition data_stream_definition = 1;
 }
 
-// Request to update an end device definition
-message UpdateEndDeviceDefinitionRequest {
+// Request to update a data stream definition
+message UpdateDataStreamDefinitionRequest {
   // Unique identifier of the definition to update
   string id = 1;
 
@@ -91,13 +91,13 @@ message UpdateEndDeviceDefinitionRequest {
 }
 
 // Response containing the updated definition
-message UpdateEndDeviceDefinitionResponse {
+message UpdateDataStreamDefinitionResponse {
   // The updated definition
-  EndDeviceDefinition end_device_definition = 1;
+  DataStreamDefinition data_stream_definition = 1;
 }
 
-// Request to delete an end device definition
-message DeleteEndDeviceDefinitionRequest {
+// Request to delete a data stream definition
+message DeleteDataStreamDefinitionRequest {
   // Unique identifier of the definition to delete
   string id = 1;
 
@@ -106,34 +106,34 @@ message DeleteEndDeviceDefinitionRequest {
 }
 
 // Response for delete operation (empty on success)
-message DeleteEndDeviceDefinitionResponse {}
+message DeleteDataStreamDefinitionResponse {}
 
-// Request to list end device definitions for an organization
-message ListEndDeviceDefinitionsRequest {
+// Request to list data stream definitions for an organization
+message ListDataStreamDefinitionsRequest {
   // Organization ID to filter definitions by
   string organization_id = 1;
 }
 
 // Response containing definitions for the organization
-message ListEndDeviceDefinitionsResponse {
+message ListDataStreamDefinitionsResponse {
   // List of definitions belonging to the organization
-  repeated EndDeviceDefinition end_device_definitions = 1;
+  repeated DataStreamDefinition data_stream_definitions = 1;
 }
 
-// Service for managing end device definitions
-service EndDeviceDefinitionService {
+// Service for managing data stream definitions
+service DataStreamDefinitionService {
   // Create a new definition
-  rpc CreateEndDeviceDefinition(CreateEndDeviceDefinitionRequest) returns (CreateEndDeviceDefinitionResponse);
+  rpc CreateDataStreamDefinition(CreateDataStreamDefinitionRequest) returns (CreateDataStreamDefinitionResponse);
 
   // Retrieve a definition by its ID
-  rpc GetEndDeviceDefinition(GetEndDeviceDefinitionRequest) returns (GetEndDeviceDefinitionResponse);
+  rpc GetDataStreamDefinition(GetDataStreamDefinitionRequest) returns (GetDataStreamDefinitionResponse);
 
   // Update an existing definition
-  rpc UpdateEndDeviceDefinition(UpdateEndDeviceDefinitionRequest) returns (UpdateEndDeviceDefinitionResponse);
+  rpc UpdateDataStreamDefinition(UpdateDataStreamDefinitionRequest) returns (UpdateDataStreamDefinitionResponse);
 
-  // Delete a definition (fails if devices reference it)
-  rpc DeleteEndDeviceDefinition(DeleteEndDeviceDefinitionRequest) returns (DeleteEndDeviceDefinitionResponse);
+  // Delete a definition (fails if data streams reference it)
+  rpc DeleteDataStreamDefinition(DeleteDataStreamDefinitionRequest) returns (DeleteDataStreamDefinitionResponse);
 
   // List all definitions for an organization
-  rpc ListEndDeviceDefinitions(ListEndDeviceDefinitionsRequest) returns (ListEndDeviceDefinitionsResponse);
+  rpc ListDataStreamDefinitions(ListDataStreamDefinitionsRequest) returns (ListDataStreamDefinitionsResponse);
 }
