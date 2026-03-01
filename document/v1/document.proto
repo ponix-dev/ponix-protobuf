@@ -1,0 +1,255 @@
+syntax = "proto3";
+
+package document.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// Document represents metadata about a stored document/file.
+// Documents are scoped to organizations for multi-tenancy.
+message Document {
+  // Server-generated unique identifier
+  string document_id = 1;
+
+  // Organization that owns this document
+  string organization_id = 2;
+
+  // Human-readable name for the document
+  string name = 3;
+
+  // MIME type of the document content
+  string mime_type = 4;
+
+  // Size of the document content in bytes
+  int64 size_bytes = 5;
+
+  // SHA-256 checksum of the document content
+  string checksum = 6;
+
+  // Arbitrary key-value metadata
+  google.protobuf.Struct metadata = 7;
+
+  // When the document was created
+  google.protobuf.Timestamp created_at = 8;
+
+  // When the document was last updated
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// Lightweight document representation for list responses.
+// Excludes checksum; use GetDocument for the full view.
+message DocumentSummary {
+  string document_id = 1;
+  string organization_id = 2;
+  string name = 3;
+  string mime_type = 4;
+  int64 size_bytes = 5;
+  google.protobuf.Struct metadata = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// --- Standalone document operations ---
+
+// Request to get a document by ID
+message GetDocumentRequest {
+  string document_id = 1;
+  string organization_id = 2;
+}
+
+message GetDocumentResponse {
+  Document document = 1;
+}
+
+// Request to delete a document (soft delete, cascades to all associations)
+message DeleteDocumentRequest {
+  string document_id = 1;
+  string organization_id = 2;
+}
+
+message DeleteDocumentResponse {}
+
+// Request to download a document's content (server-streaming)
+message DownloadDocumentRequest {
+  string document_id = 1;
+  string organization_id = 2;
+}
+
+message DownloadDocumentResponse {
+  oneof data {
+    // First message: document metadata
+    Document metadata = 1;
+    // Subsequent messages: binary content chunks
+    bytes chunk = 2;
+  }
+}
+
+// --- Data Stream document operations ---
+
+message UploadDataStreamDocumentRequest {
+  string data_stream_id = 1;
+  string organization_id = 2;
+  string workspace_id = 3;
+  string name = 4;
+  string mime_type = 5;
+  google.protobuf.Struct metadata = 6;
+  bytes content = 7;
+}
+
+message UploadDataStreamDocumentResponse {
+  Document document = 1;
+}
+
+message UpdateDataStreamDocumentRequest {
+  string document_id = 1;
+  string data_stream_id = 2;
+  string organization_id = 3;
+  string workspace_id = 4;
+  optional string name = 5;
+  optional string mime_type = 6;
+  optional google.protobuf.Struct metadata = 7;
+  // If provided, replaces the document content
+  optional bytes content = 8;
+}
+
+message UpdateDataStreamDocumentResponse {
+  Document document = 1;
+}
+
+message UnlinkDocumentFromDataStreamRequest {
+  string document_id = 1;
+  string data_stream_id = 2;
+  string organization_id = 3;
+  string workspace_id = 4;
+}
+
+message UnlinkDocumentFromDataStreamResponse {}
+
+message ListDataStreamDocumentsRequest {
+  string data_stream_id = 1;
+  string organization_id = 2;
+  string workspace_id = 3;
+}
+
+message ListDataStreamDocumentsResponse {
+  repeated DocumentSummary documents = 1;
+}
+
+// --- Data Stream Definition document operations ---
+
+message UploadDefinitionDocumentRequest {
+  string definition_id = 1;
+  string organization_id = 2;
+  string name = 3;
+  string mime_type = 4;
+  google.protobuf.Struct metadata = 5;
+  bytes content = 6;
+}
+
+message UploadDefinitionDocumentResponse {
+  Document document = 1;
+}
+
+message UpdateDefinitionDocumentRequest {
+  string document_id = 1;
+  string definition_id = 2;
+  string organization_id = 3;
+  optional string name = 4;
+  optional string mime_type = 5;
+  optional google.protobuf.Struct metadata = 6;
+  optional bytes content = 7;
+}
+
+message UpdateDefinitionDocumentResponse {
+  Document document = 1;
+}
+
+message UnlinkDocumentFromDefinitionRequest {
+  string document_id = 1;
+  string definition_id = 2;
+  string organization_id = 3;
+}
+
+message UnlinkDocumentFromDefinitionResponse {}
+
+message ListDefinitionDocumentsRequest {
+  string definition_id = 1;
+  string organization_id = 2;
+}
+
+message ListDefinitionDocumentsResponse {
+  repeated DocumentSummary documents = 1;
+}
+
+// --- Workspace document operations ---
+
+message UploadWorkspaceDocumentRequest {
+  string workspace_id = 1;
+  string organization_id = 2;
+  string name = 3;
+  string mime_type = 4;
+  google.protobuf.Struct metadata = 5;
+  bytes content = 6;
+}
+
+message UploadWorkspaceDocumentResponse {
+  Document document = 1;
+}
+
+message UpdateWorkspaceDocumentRequest {
+  string document_id = 1;
+  string workspace_id = 2;
+  string organization_id = 3;
+  optional string name = 4;
+  optional string mime_type = 5;
+  optional google.protobuf.Struct metadata = 6;
+  optional bytes content = 7;
+}
+
+message UpdateWorkspaceDocumentResponse {
+  Document document = 1;
+}
+
+message UnlinkDocumentFromWorkspaceRequest {
+  string document_id = 1;
+  string workspace_id = 2;
+  string organization_id = 3;
+}
+
+message UnlinkDocumentFromWorkspaceResponse {}
+
+message ListWorkspaceDocumentsRequest {
+  string workspace_id = 1;
+  string organization_id = 2;
+}
+
+message ListWorkspaceDocumentsResponse {
+  repeated DocumentSummary documents = 1;
+}
+
+// Service for managing documents and their associations.
+// Documents are always created through an association (data stream, definition, or workspace).
+service DocumentService {
+  // Standalone operations
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse);
+  rpc DeleteDocument(DeleteDocumentRequest) returns (DeleteDocumentResponse);
+  rpc DownloadDocument(DownloadDocumentRequest) returns (stream DownloadDocumentResponse);
+
+  // Data Stream document operations
+  rpc UploadDataStreamDocument(UploadDataStreamDocumentRequest) returns (UploadDataStreamDocumentResponse);
+  rpc UpdateDataStreamDocument(UpdateDataStreamDocumentRequest) returns (UpdateDataStreamDocumentResponse);
+  rpc UnlinkDocumentFromDataStream(UnlinkDocumentFromDataStreamRequest) returns (UnlinkDocumentFromDataStreamResponse);
+  rpc ListDataStreamDocuments(ListDataStreamDocumentsRequest) returns (ListDataStreamDocumentsResponse);
+
+  // Data Stream Definition document operations
+  rpc UploadDefinitionDocument(UploadDefinitionDocumentRequest) returns (UploadDefinitionDocumentResponse);
+  rpc UpdateDefinitionDocument(UpdateDefinitionDocumentRequest) returns (UpdateDefinitionDocumentResponse);
+  rpc UnlinkDocumentFromDefinition(UnlinkDocumentFromDefinitionRequest) returns (UnlinkDocumentFromDefinitionResponse);
+  rpc ListDefinitionDocuments(ListDefinitionDocumentsRequest) returns (ListDefinitionDocumentsResponse);
+
+  // Workspace document operations
+  rpc UploadWorkspaceDocument(UploadWorkspaceDocumentRequest) returns (UploadWorkspaceDocumentResponse);
+  rpc UpdateWorkspaceDocument(UpdateWorkspaceDocumentRequest) returns (UpdateWorkspaceDocumentResponse);
+  rpc UnlinkDocumentFromWorkspace(UnlinkDocumentFromWorkspaceRequest) returns (UnlinkDocumentFromWorkspaceResponse);
+  rpc ListWorkspaceDocuments(ListWorkspaceDocumentsRequest) returns (ListWorkspaceDocumentsResponse);
+}
