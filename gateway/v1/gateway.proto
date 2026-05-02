@@ -18,23 +18,19 @@ enum GatewayStatus {
   GATEWAY_STATUS_PENDING = 3;
 }
 
-enum GatewayType {
-    // Unknown type
-    GATEWAY_TYPE_UNSPECIFIED = 0;
-    
-    // EMQX Gateway
-    GATEWAY_TYPE_EMQX = 1;
+// Credentials for connecting to a gateway's MQTT broker.
+// Stored in plaintext for now; encryption-at-rest is tracked separately.
+message MqttCredentials {
+  string username = 1;
+  string password = 2;
 }
 
-message EMQXGatewayConfig {
-  // URL of the EMQX broker
-  string broker_url = 1;
-}
-
-
-// Gateway represents a gateway registered in the system
-// for ingesting data from end devices.
+// Gateway represents a LoRaWAN network server MQTT connection
+// registered in the system for ingesting data from end devices.
 message Gateway {
+  reserved 5, 9;
+  reserved "type", "emqx_config";
+
   // Server-generated unique identifier (UUID format)
   string gateway_id = 1;
 
@@ -47,9 +43,6 @@ message Gateway {
   // Current status of the gateway
   GatewayStatus status = 4;
 
-  // Type of the gateway
-  GatewayType type = 5;
-
   // When the gateway was created
   google.protobuf.Timestamp created_at = 6;
 
@@ -59,27 +52,29 @@ message Gateway {
   // When the gateway was deleted
   google.protobuf.Timestamp deleted_at = 8;
 
-  oneof config {
-    // EMQX Gateway configuration
-    EMQXGatewayConfig emqx_config = 9;
-  }
+  // URL of the MQTT broker (e.g. "mqtt://broker.example.com:1883")
+  string broker_url = 10;
+
+  // Optional MQTT credentials. Unset for anonymous brokers.
+  optional MqttCredentials credentials = 11;
 }
 
-// Request to create a gateway
-// Device ID is generated server-side
+// Request to create a gateway. Gateway ID is generated server-side.
 message CreateGatewayRequest {
-  // Organization that will own this device
+  reserved 3, 4;
+  reserved "type", "emqx_config";
+
+  // Organization that will own this gateway
   string organization_id = 1;
 
-  // Human-readable name for the device
+  // Human-readable name for the gateway
   string name = 2;
 
-  GatewayType type = 3;
+  // URL of the MQTT broker
+  string broker_url = 5;
 
-  oneof config {
-    // EMQX Gateway configuration
-    EMQXGatewayConfig emqx_config = 4;
-  }
+  // Optional MQTT credentials
+  optional MqttCredentials credentials = 6;
 }
 
 // Response containing the newly created gateway
@@ -116,8 +111,12 @@ message ListGatewaysResponse {
   repeated Gateway gateways = 1;
 }
 
-// Request to update a gateway
+// Request to update a gateway. All updatable fields are optional;
+// only fields that are set are applied.
 message UpdateGatewayRequest {
+  reserved 4, 5;
+  reserved "type", "emqx_config";
+
   // Unique identifier of the gateway to update
   string gateway_id = 1;
 
@@ -127,16 +126,14 @@ message UpdateGatewayRequest {
   // Optional: New status for the gateway
   GatewayStatus status = 3;
 
-  // Optional: New type for the gateway
-  GatewayType type = 4;
-
-  oneof config {
-    // EMQX Gateway configuration
-    EMQXGatewayConfig emqx_config = 5;
-  }
-
   // Organization ID owning the gateway
   string organization_id = 6;
+
+  // Optional: New MQTT broker URL
+  optional string broker_url = 7;
+
+  // Optional: New MQTT credentials
+  optional MqttCredentials credentials = 8;
 }
 
 // Response containing the updated gateway
@@ -159,7 +156,7 @@ message DeleteGatewayResponse {
   // Empty response - deletion confirmed by successful RPC
 }
 
-// Service for managing device lifecycle
+// Service for managing gateway lifecycle
 service GatewayService {
   // Register a new gateway
   rpc CreateGateway(CreateGatewayRequest) returns (CreateGatewayResponse);
